@@ -1,9 +1,5 @@
 import re
 
-# import os
-
-# DIR = os.path.dirname(os.path.abspath(__file__))
-
 morse = {}
 out = []
 
@@ -25,4 +21,4 @@ with open("vstup.txt", "r") as f:
 
 out.pop()
 
-print("".join(out))
+print("".join(out), file=open("vystup.txt", "w"))
