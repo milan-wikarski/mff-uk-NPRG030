@@ -15,10 +15,9 @@ with open("vstup.txt", "r") as f:
       if symbol == "":
         out.append(" ")
       elif symbol in morse:
+
         out.append(morse[symbol])
 
     out.append("\n")
 
-out.pop()
-
-print("".join(out), file=open("vystup.txt", "w"))
+out.pop()print("".join(out), file=open("vystup.txt", "w"))
