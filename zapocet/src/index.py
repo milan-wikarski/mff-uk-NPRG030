@@ -1,25 +1,47 @@
-from flask import Flask, request
-from flask_restful import Resource, Api
-from sqlalchemy import create_engine
-from request_builder import RequestBuilder
-from connections_list import ConnectionsList
+import logging
+import os
+import json
 
-app = Flask(__name__)
-api = Api(app)
+from dotenv import load_dotenv
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-request_builder = RequestBuilder()
-
-
-class Connection(Resource):
-  def get(self, f, t):
-    cl = ConnectionsList(request_builder, f, t)
-    cl.fetchList()
-    cl.fetchDetails()
-
-    return cl.toJSON()
+from cmd_help import cmd_help
+from cmd_start import cmd_start
+from cmd_routes import cmd_routes, cmd_routes_bus, cmd_routes_metro, cmd_routes_train, cmd_routes_tram
+from cmd_search import cmd_search
+from cmd_search_params import cmd_search_params
+from cmd_next import cmd_next
 
 
-api.add_resource(Connection, "/connection/<f>/<t>")
+# Logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
 
-if __name__ == "__main__":
-  app.run(port="5002")
+
+# Load .env
+load_dotenv()
+
+
+# Telegram bot
+updater = Updater(token=os.getenv("TELEGRAM_TOKEN"), use_context=True)
+dispatcher = updater.dispatcher
+
+
+# Commands
+dispatcher.add_handler(CommandHandler("start", cmd_start))
+dispatcher.add_handler(CommandHandler("help", cmd_help))
+
+dispatcher.add_handler(CommandHandler("routes", cmd_routes))
+dispatcher.add_handler(CommandHandler("routes_bus", cmd_routes_bus))
+dispatcher.add_handler(CommandHandler("routes_metro", cmd_routes_metro))
+dispatcher.add_handler(CommandHandler("routes_tram", cmd_routes_tram))
+dispatcher.add_handler(CommandHandler("routes_train", cmd_routes_train))
+
+dispatcher.add_handler(CommandHandler("search", cmd_search))
+dispatcher.add_handler(CommandHandler("next", cmd_next))
+dispatcher.add_handler(MessageHandler(Filters.text, cmd_search_params))
+
+
+# Run app
+updater.start_polling()
+print("The bot is running...")

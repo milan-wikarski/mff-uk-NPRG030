@@ -53,3 +53,6 @@ class RequestBuilder:
 
   def create(self, base="https://idos.idnes.cz/pid/spojeni/vysledky/"):
     return Request(base)
+
+
+request_builder = RequestBuilder()

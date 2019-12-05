@@ -1,23 +1,22 @@
 import json
 import re
-from connection_detail import ConnectionDetail
+from class_connection_detail import ConnectionDetail
+from module_request_builder import request_builder
 
 
 detailLinksRegex = re.compile("data-share-url=\"(.+?)\"")
 
 
 class ConnectionsList:
-  def __init__(self,  request_builder, f, t):
-    self.request_builder = request_builder
-
+  def __init__(self, f, t):
     self.f = f
     self.t = t
 
     self.connections = []
 
-  def fetchList(self):
+  def fetch_list(self):
     # Build and send request
-    request = self.request_builder.create().setParam("from", self.f).setParam(
+    request = request_builder.create().setParam("from", self.f).setParam(
         "to", self.t).build().send()
 
     # Get detail links and create ConnectionDetail objects
@@ -26,18 +25,9 @@ class ConnectionsList:
 
     return self
 
-  def fetchDetails(self):
+  def fetch_details(self):
     # Fetch details of all connections
     for connection in self.connections:
-      connection.fetch(self.request_builder)
+      connection.fetch()
 
     return self
-
-  def toJSON(self):
-    res = []
-
-    for connection in self.connections:
-      res.append(connection.toJSON())
-
-    return res
-    # return "[" + ",".join(res) + "]"
