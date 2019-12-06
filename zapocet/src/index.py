@@ -3,7 +3,7 @@ import os
 import json
 
 from dotenv import load_dotenv
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 
 from cmd_help import cmd_help
 from cmd_start import cmd_start
@@ -11,6 +11,7 @@ from cmd_routes import cmd_routes, cmd_routes_bus, cmd_routes_metro, cmd_routes_
 from cmd_search import cmd_search
 from cmd_search_params import cmd_search_params
 from cmd_next import cmd_next
+from cmd_inline import cmd_inline
 
 
 # Logging
@@ -41,6 +42,7 @@ dispatcher.add_handler(CommandHandler("search", cmd_search))
 dispatcher.add_handler(CommandHandler("next", cmd_next))
 dispatcher.add_handler(MessageHandler(Filters.text, cmd_search_params))
 
+# dispatcher.add_handler(InlineQueryHandler(cmd_inline))
 
 # Run app
 updater.start_polling()
