@@ -11,7 +11,6 @@ from cmd_routes import cmd_routes, cmd_routes_bus, cmd_routes_metro, cmd_routes_
 from cmd_search import cmd_search
 from cmd_search_params import cmd_search_params
 from cmd_next import cmd_next
-from cmd_inline import cmd_inline
 
 
 # Logging
@@ -41,8 +40,6 @@ dispatcher.add_handler(CommandHandler("routes_train", cmd_routes_train))
 dispatcher.add_handler(CommandHandler("search", cmd_search))
 dispatcher.add_handler(CommandHandler("next", cmd_next))
 dispatcher.add_handler(MessageHandler(Filters.text, cmd_search_params))
-
-# dispatcher.add_handler(InlineQueryHandler(cmd_inline))
 
 # Run app
 updater.start_polling()
